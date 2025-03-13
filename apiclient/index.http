@@ -7,3 +7,12 @@ Content-Type: application/json
   "password": "Password123"
 }
 
+### Validación del email
+PUT http://localhost:3000/validation
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "code": "123456"
+}
+
