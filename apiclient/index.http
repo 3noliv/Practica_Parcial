@@ -17,7 +17,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDI5ZWNjM
 }
 
 ### Login de usuario
-POST http://localhost:3000/login
+POST http://localhost:3000/api/user/login
 Content-Type: application/json
 
 {

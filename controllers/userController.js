@@ -85,16 +85,32 @@ const validateEmail = async (req, res) => {
 // Login
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = matchedData(req);
+    console.log("🟢 Recibiendo datos de login:", req.body);
+
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+
+    if (!user) {
+      console.log("🔴 Usuario no encontrado");
       return res.status(401).json({ message: "Credenciales inválidas" });
     }
+
+    console.log("🟢 Usuario encontrado:", user.email);
+
+    const isMatch = await bcrypt.compare(password, user.password); // Comparar hash
+    if (!isMatch) {
+      console.log("🔴 Contraseña incorrecta");
+      return res.status(401).json({ message: "Credenciales inválidas" });
+    }
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
+
+    console.log("✅ Login exitoso, enviando token");
     res.json({ user: { email: user.email, role: user.role }, token });
   } catch (error) {
+    console.error("❌ Error en el login:", error);
     res.status(500).json({ message: "Error en el login" });
   }
 };
