@@ -8,12 +8,12 @@ Content-Type: application/json
 }
 
 ### Validación del email
-PUT http://localhost:3000/validation
+PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer YOUR_TOKEN_HERE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDI5ZWNjMWE2OTRkZTQ0M2IwNzU5YyIsImlhdCI6MTc0MTg1NjQ2MCwiZXhwIjoxNzQxODYwMDYwfQ.1PmFHj3OUmxL93nAndU2GQKHhe9uDS39dCr38tl0Z-M
 
 {
-  "code": "123456"
+  "code": "955393"
 }
 
 ### Login de usuario

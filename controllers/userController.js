@@ -55,17 +55,29 @@ const registerUser = async (req, res) => {
 // Validación del email
 const validateEmail = async (req, res) => {
   try {
-    const { code } = matchedData(req);
+    console.log("🟢 Token recibido:", req.user);
+    console.log("🟢 Código recibido:", req.body.code);
+
     const user = await User.findById(req.user.id);
-    if (!user)
+    if (!user) {
+      console.log("🔴 Usuario no encontrado");
       return res.status(404).json({ message: "Usuario no encontrado" });
-    if (user.verificationCode !== code)
+    }
+
+    console.log("🟢 Código en BD:", user.verificationCode);
+
+    if (user.verificationCode !== req.body.code) {
+      console.log("🔴 Código incorrecto");
       return res.status(400).json({ message: "Código incorrecto" });
+    }
 
     user.status = "verified";
     await user.save();
+    console.log("✅ Email validado correctamente");
+
     res.json({ message: "Email validado correctamente" });
   } catch (error) {
+    console.error("❌ Error en la validación:", error);
     res.status(500).json({ message: "Error en la validación" });
   }
 };
