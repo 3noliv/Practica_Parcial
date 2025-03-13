@@ -17,6 +17,9 @@ app.get("/", (req, res) => {
 // Conectar a la base de datos
 dbConnect();
 
+const routes = require("./routes");
+app.use("/api", routes);
+
 // Puerto de escucha
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
