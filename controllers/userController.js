@@ -7,30 +7,48 @@ const generateCode = require("../utils/generateCode.js");
 // Registro de usuario
 const registerUser = async (req, res) => {
   try {
-    const data = matchedData(req);
+    console.log("🟢 Recibiendo datos:", req.body);
+
+    const data = req.body;
+    console.log("🟢 Datos procesados:", data);
+
+    if (!data.email || !data.password) {
+      return res
+        .status(400)
+        .json({ message: "Email y password son obligatorios" });
+    }
+
     const userExists = await User.findOne({ email: data.email });
-    if (userExists)
+    if (userExists) {
+      console.log("🔴 Email ya registrado");
       return res.status(409).json({ message: "Email ya registrado" });
+    }
 
     const verificationCode = generateCode();
+    console.log("🟢 Código de verificación generado:", verificationCode);
+
     const newUser = new User({ ...data, verificationCode });
     await newUser.save();
+    console.log("✅ Usuario guardado en la base de datos");
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res
-      .status(201)
-      .json({
-        user: {
-          email: newUser.email,
-          status: newUser.status,
-          role: newUser.role,
-        },
-        token,
-      });
+    console.log("🟢 Token JWT generado");
+
+    res.status(201).json({
+      user: {
+        email: newUser.email,
+        status: newUser.status,
+        role: newUser.role,
+      },
+      token,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Error en el registro" });
+    console.error("❌ Error en el registro:", error);
+    res
+      .status(500)
+      .json({ message: "Error en el registro", error: error.message });
   }
 };
 
