@@ -3,17 +3,17 @@ POST http://localhost:3000/api/user/register
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "ivan.martinez@live.u-tad.com",
   "password": "Password123"
 }
 
 ### Validación del email
 PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDI5ZWNjMWE2OTRkZTQ0M2IwNzU5YyIsImlhdCI6MTc0MTg1NjQ2MCwiZXhwIjoxNzQxODYwMDYwfQ.1PmFHj3OUmxL93nAndU2GQKHhe9uDS39dCr38tl0Z-M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZGFhOTY3ZTIyZGIyMmJiYTI3MDVjZSIsImlhdCI6MTc0MjM4MzQ2MywiZXhwIjoxNzQyMzg3MDYzfQ.epPc0Rhz826Itx5YoKQp0UaAotq2CdH5hMDGbEC-yOI
 
 {
-  "code": "955393"
+  "code": "101970"
 }
 
 ### Login de usuario
@@ -21,6 +21,18 @@ POST http://localhost:3000/api/user/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "ivan.martinez@live.u-tad.com",
   "password": "Password123"
+}
+
+### Mandar email
+POST http://localhost:3000/api/mail
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZGFhOTY3ZTIyZGIyMmJiYTI3MDVjZSIsImlhdCI6MTc0MjM4MzU5NCwiZXhwIjoxNzQyMzg3MTk0fQ.2g6pBjsjFQFwxfZPSVYcA19NkSaTCTRUhVqfvjzwyu8
+
+{
+  "subject": "Prueba",
+  "text": "Este es un email de prueba desde Nodemailer",
+  "to": "destinatario@example.com",
+  "from": "tupu"
 }
