@@ -63,9 +63,32 @@ const validateOnboarding = [
   (req, res, next) => validateResults(req, res, next),
 ];
 
+const validateCompany = [
+  check("name")
+    .exists()
+    .withMessage("El nombre de la empresa es obligatorio")
+    .notEmpty()
+    .withMessage("El nombre de la empresa no puede estar vacío"),
+
+  check("cif")
+    .exists()
+    .withMessage("El CIF es obligatorio")
+    .matches(/^[A-Z]\d{8}$/)
+    .withMessage("El CIF debe empezar por una letra seguida de 8 dígitos"),
+
+  check("address")
+    .exists()
+    .withMessage("La dirección es obligatoria")
+    .notEmpty()
+    .withMessage("La dirección no puede estar vacía"),
+
+  (req, res, next) => validateResults(req, res, next),
+];
+
 module.exports = {
   validateRegister,
   validateLogin,
   validateCode,
   validateOnboarding,
+  validateCompany,
 };

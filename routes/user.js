@@ -11,6 +11,8 @@ const {
   validateLogin,
   validateCode,
   validateOnboarding,
+  validateCompany,
+  updateCompany,
 } = require("../validators/userValidator");
 const router = express.Router();
 
@@ -25,5 +27,7 @@ router.post("/login", validateLogin, loginUser);
 
 // Onboarding de usuario
 router.put("/register", authMiddleware, validateOnboarding, updateOnboarding);
+
+router.patch("/company", authMiddleware, validateCompany, updateCompany);
 
 module.exports = router;

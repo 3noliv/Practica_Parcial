@@ -2,7 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { matchedData } = require("express-validator");
-const generateCode = require("../utils/generateCode.js");
+const generateCode = require("../utils/generateCode");
 
 // Registro de usuario
 const registerUser = async (req, res) => {
@@ -135,4 +135,30 @@ const updateOnboarding = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, validateEmail, loginUser, updateOnboarding };
+const updateCompany = async (req, res) => {
+  try {
+    const { name, cif, address } = req.body;
+    const user = await User.findById(req.user.id);
+
+    if (!user)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+
+    user.companyData = { name, cif, address };
+    await user.save();
+
+    res.json({ message: "✅ Datos de la compañía actualizados correctamente" });
+  } catch (error) {
+    console.error("❌ Error actualizando los datos de la compañía:", error);
+    res
+      .status(500)
+      .json({ message: "Error al actualizar los datos de la compañía" });
+  }
+};
+
+module.exports = {
+  registerUser,
+  validateEmail,
+  loginUser,
+  updateOnboarding,
+  updateCompany,
+};
