@@ -3,17 +3,27 @@ const {
   registerUser,
   validateEmail,
   loginUser,
+  updateOnboarding,
 } = require("../controllers/userController");
-const authMiddleware = require("../middleware/authMiddleware");
+const authMiddleware = require("../middlewares/authMiddleware");
+const {
+  validateRegister,
+  validateLogin,
+  validateCode,
+  validateOnboarding,
+} = require("../validators/userValidator");
 const router = express.Router();
 
 // Registro de usuario
-router.post("/register", registerUser);
+router.post("/register", validateRegister, registerUser);
 
 // Validación del email
-router.put("/validation", authMiddleware, validateEmail);
+router.put("/validation", authMiddleware, validateCode, validateEmail);
 
 // Login de usuario
-router.post("/login", loginUser);
+router.post("/login", validateLogin, loginUser);
+
+// Onboarding de usuario
+router.put("/register", authMiddleware, validateOnboarding, updateOnboarding);
 
 module.exports = router;

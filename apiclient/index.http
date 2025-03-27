@@ -10,10 +10,10 @@ Content-Type: application/json
 ### Validación del email
 PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZGFhOTY3ZTIyZGIyMmJiYTI3MDVjZSIsImlhdCI6MTc0MjM4MzQ2MywiZXhwIjoxNzQyMzg3MDYzfQ.epPc0Rhz826Itx5YoKQp0UaAotq2CdH5hMDGbEC-yOI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVhZDU4N2MwODMxYzZkZjkwYTRiNSIsImlhdCI6MTc0MzEwNTM2OCwiZXhwIjoxNzQzMTA4OTY4fQ.aHmNZi-MzdIbBFUwGI_F-mdwbeI2JyKNK9oG_UOsWMc
 
 {
-  "code": "540812"
+  "code": "184795"
 }
 
 ### Login de usuario
@@ -28,11 +28,22 @@ Content-Type: application/json
 ### Mandar email
 POST http://localhost:3000/api/mail
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZGFhOTY3ZTIyZGIyMmJiYTI3MDVjZSIsImlhdCI6MTc0MjM4MzU5NCwiZXhwIjoxNzQyMzg3MTk0fQ.2g6pBjsjFQFwxfZPSVYcA19NkSaTCTRUhVqfvjzwyu8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVhZDU4N2MwODMxYzZkZjkwYTRiNSIsImlhdCI6MTc0MzEwNTQ0NiwiZXhwIjoxNzQzMTA5MDQ2fQ.1LFLgS9EVkNKYkC_3jQLEZrcB9yPlYLXX67lgHtCqj0
 
 {
   "subject": "Prueba",
   "text": "Este es un email de prueba desde Nodemailer",
-  "to": "destinatario@example.com",
+  "to": "ivan.martinez@live.u-tad.com",
   "from": "tupu"
+}
+
+### Onboarding de usuario
+PUT http://localhost:3000/api/user/register
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVhZDU4N2MwODMxYzZkZjkwYTRiNSIsImlhdCI6MTc0MzEwNTQ0NiwiZXhwIjoxNzQzMTA5MDQ2fQ.1LFLgS9EVkNKYkC_3jQLEZrcB9yPlYLXX67lgHtCqj0
+
+{
+  "name": "Juan",
+  "surname": "Pérez",
+  "nif": "12345678Z"
 }
