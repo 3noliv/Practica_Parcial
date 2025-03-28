@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const path = require("path");
 const { matchedData } = require("express-validator");
 const generateCode = require("../utils/generateCode");
 
@@ -155,10 +156,50 @@ const updateCompany = async (req, res) => {
   }
 };
 
+const updateLogo = async (req, res) => {
+  try {
+    console.log("🟢 Token OK, buscando usuario...");
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      console.log("❌ Usuario no encontrado");
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    console.log("🟢 Usuario encontrado:", user.email);
+
+    if (!req.file) {
+      console.log("❌ Archivo no recibido");
+      return res
+        .status(400)
+        .json({ message: "No se ha subido ningún archivo" });
+    }
+
+    console.log("🟢 Archivo recibido:", req.file);
+
+    const logoPath = path.join("/storage/logos", req.file.filename);
+    user.logoUrl = logoPath;
+    await user.save();
+
+    console.log("✅ Logo guardado en:", logoPath);
+
+    res.json({
+      message: "✅ Logo actualizado correctamente",
+      logoUrl: logoPath,
+    });
+  } catch (error) {
+    console.error("❌ Error actualizando el logo:", error);
+    res
+      .status(500)
+      .json({ message: "Error al actualizar el logo", error: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   validateEmail,
   loginUser,
   updateOnboarding,
   updateCompany,
+  updateLogo,
 };

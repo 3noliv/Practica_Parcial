@@ -4,15 +4,17 @@ const {
   validateEmail,
   loginUser,
   updateOnboarding,
+  updateCompany,
+  updateLogo,
 } = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
+const uploadLogo = require("../middlewares/uploadLogo");
 const {
   validateRegister,
   validateLogin,
   validateCode,
   validateOnboarding,
   validateCompany,
-  updateCompany,
 } = require("../validators/userValidator");
 const router = express.Router();
 
@@ -29,5 +31,7 @@ router.post("/login", validateLogin, loginUser);
 router.put("/register", authMiddleware, validateOnboarding, updateOnboarding);
 
 router.patch("/company", authMiddleware, validateCompany, updateCompany);
+
+router.patch("/logo", authMiddleware, uploadLogo.single("logo"), updateLogo);
 
 module.exports = router;

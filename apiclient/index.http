@@ -1,49 +1,60 @@
-### Registro de usuario
+### 1. Registro de usuario
 POST http://localhost:3000/api/user/register
 Content-Type: application/json
 
 {
-  "email": "ivan.martinez@live.u-tad.com",
+  "email": "test@example.com",
   "password": "Password123"
 }
 
-### Validación del email
-PUT http://localhost:3000/api/user/validation
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVhZDU4N2MwODMxYzZkZjkwYTRiNSIsImlhdCI6MTc0MzEwNTM2OCwiZXhwIjoxNzQzMTA4OTY4fQ.aHmNZi-MzdIbBFUwGI_F-mdwbeI2JyKNK9oG_UOsWMc
-
-{
-  "code": "184795"
-}
-
-### Login de usuario
+### 2. Login (para obtener el token)
 POST http://localhost:3000/api/user/login
 Content-Type: application/json
 
 {
-  "email": "ivan.martinez@live.u-tad.com",
+  "email": "test@example.com",
   "password": "Password123"
 }
 
-### Mandar email
-POST http://localhost:3000/api/mail
+### 3. Validación del email (con token y código)
+PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVhZDU4N2MwODMxYzZkZjkwYTRiNSIsImlhdCI6MTc0MzEwNTQ0NiwiZXhwIjoxNzQzMTA5MDQ2fQ.1LFLgS9EVkNKYkC_3jQLEZrcB9yPlYLXX67lgHtCqj0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiMDRlMTgxMTliMTc2YjJhOCIsImlhdCI6MTc0MzExNTgzNSwiZXhwIjoxNzQzMTE5NDM1fQ.UmSX7S-Vs3C0XqyFzFmKSs-6-KUf9ysHzqLJPCnbYGA
 
 {
-  "subject": "Prueba",
-  "text": "Este es un email de prueba desde Nodemailer",
-  "to": "ivan.martinez@live.u-tad.com",
-  "from": "tupu"
+  "code": "859198"
 }
 
-### Onboarding de usuario
+### 4. Onboarding - Datos personales
 PUT http://localhost:3000/api/user/register
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVhZDU4N2MwODMxYzZkZjkwYTRiNSIsImlhdCI6MTc0MzEwNTQ0NiwiZXhwIjoxNzQzMTA5MDQ2fQ.1LFLgS9EVkNKYkC_3jQLEZrcB9yPlYLXX67lgHtCqj0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiMDRlMTgxMTliMTc2YjJhOCIsImlhdCI6MTc0MzExNTkxOCwiZXhwIjoxNzQzMTE5NTE4fQ.ElhXWYSHvWfy9bkSXGee8qhp8wJh_b1METBk4fGB02Q
 
 {
   "name": "Juan",
   "surname": "Pérez",
   "nif": "12345678Z"
 }
+
+### 5. Datos de la compañía
+PATCH http://localhost:3000/api/user/company
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiMDRlMTgxMTliMTc2YjJhOCIsImlhdCI6MTc0MzExNTkxOCwiZXhwIjoxNzQzMTE5NTE4fQ.ElhXWYSHvWfy9bkSXGee8qhp8wJh_b1METBk4fGB02Q
+
+{
+  "name": "Empresa S.A.",
+  "cif": "B12345678",
+  "address": "Calle Falsa 123"
+}
+
+### Subida de logo
+PATCH http://localhost:3000/api/user/logo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiMDRlMTgxMTliMTc2YjJhOCIsImlhdCI6MTc0MzExNTkxOCwiZXhwIjoxNzQzMTE5NTE4fQ.ElhXWYSHvWfy9bkSXGee8qhp8wJh_b1METBk4fGB02Q
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="logo"; filename="logo.png"
+Content-Type: image/png
+
+< ./test_uploads/logo.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
