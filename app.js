@@ -1,4 +1,5 @@
 const express = require("express");
+const setupSwagger = require("./config/swagger");
 const cors = require("cors");
 require("dotenv").config();
 
@@ -6,6 +7,7 @@ const dbConnect = require("./config/mongo");
 const routes = require("./routes");
 
 const app = express();
+setupSwagger(app);
 
 app.use(cors());
 app.use(express.json());
