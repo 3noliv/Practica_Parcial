@@ -19,16 +19,16 @@ Content-Type: application/json
 ### 3. Validación del email (con token y código)
 PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZDdmMWM3Y2I0ZGE2ODhjNyIsImlhdCI6MTc0MzE5MjczNiwiZXhwIjoxNzQzMTk2MzM2fQ.qDuxcjNTHqUIcs3Llt2qWD5J-XUa4cFqzmmFmzBMaMw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcxMGZiY2QwNzI3MTdkYTRiMTEwOSIsImlhdCI6MTc0MzE5NjQxMSwiZXhwIjoxNzQzMjAwMDExfQ.4p8PW9NbOHZHPNYEHG08RB7IjWTb4BP5mE4ObeXdGoE
 
 {
-  "code": "859198"
+  "code": "148477"
 }
 
 ### 4. Onboarding - Datos personales
 PUT http://localhost:3000/api/user/register
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZDdmMWM3Y2I0ZGE2ODhjNyIsImlhdCI6MTc0MzE5Mjc2NSwiZXhwIjoxNzQzMTk2MzY1fQ.qEyzSR6S2fP8GDPcLnNnKpAx7sakGaTjwDT7UVzVKLs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcxMGZiY2QwNzI3MTdkYTRiMTEwOSIsImlhdCI6MTc0MzE5NjQ1OSwiZXhwIjoxNzQzMjAwMDU5fQ.wAzbpAZ0nkzpKOA_C2RQhDOP_YjfaTQGGSBJB7o6niM
 
 {
   "name": "Juan",
@@ -39,7 +39,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZ
 ### 5. Datos de la compañía
 PATCH http://localhost:3000/api/user/company
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZDdmMWM3Y2I0ZGE2ODhjNyIsImlhdCI6MTc0MzE5Mjc2NSwiZXhwIjoxNzQzMTk2MzY1fQ.qEyzSR6S2fP8GDPcLnNnKpAx7sakGaTjwDT7UVzVKLs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcxMGZiY2QwNzI3MTdkYTRiMTEwOSIsImlhdCI6MTc0MzE5NjQ1OSwiZXhwIjoxNzQzMjAwMDU5fQ.wAzbpAZ0nkzpKOA_C2RQhDOP_YjfaTQGGSBJB7o6niM
 
 {
   "name": "Empresa S.A.",
@@ -49,7 +49,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZ
 
 ### Subida de logo
 PATCH http://localhost:3000/api/user/logo
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZDdmMWM3Y2I0ZGE2ODhjNyIsImlhdCI6MTc0MzE5Mjc2NSwiZXhwIjoxNzQzMTk2MzY1fQ.qEyzSR6S2fP8GDPcLnNnKpAx7sakGaTjwDT7UVzVKLs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcxMGZiY2QwNzI3MTdkYTRiMTEwOSIsImlhdCI6MTc0MzE5NjQ1OSwiZXhwIjoxNzQzMjAwMDU5fQ.wAzbpAZ0nkzpKOA_C2RQhDOP_YjfaTQGGSBJB7o6niM
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -58,3 +58,15 @@ Content-Type: image/png
 
 < ./test_uploads/logo.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Obtener datos del usuario autenticado
+GET http://localhost:3000/api/user/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcxMGZiY2QwNzI3MTdkYTRiMTEwOSIsImlhdCI6MTc0MzE5NjQ1OSwiZXhwIjoxNzQzMjAwMDU5fQ.wAzbpAZ0nkzpKOA_C2RQhDOP_YjfaTQGGSBJB7o6niM
+
+### Soft delete
+DELETE http://localhost:3000/api/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcxMGZiY2QwNzI3MTdkYTRiMTEwOSIsImlhdCI6MTc0MzE5NjQ1OSwiZXhwIjoxNzQzMjAwMDU5fQ.wAzbpAZ0nkzpKOA_C2RQhDOP_YjfaTQGGSBJB7o6niM
+
+### Hard delete
+DELETE http://localhost:3000/api/user?soft=false
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcxMGZiY2QwNzI3MTdkYTRiMTEwOSIsImlhdCI6MTc0MzE5NjU2NywiZXhwIjoxNzQzMjAwMTY3fQ.kJt6yjRaMKL7nOSTEaAOcIuwmeorcPFBmXTwE0DuOmA

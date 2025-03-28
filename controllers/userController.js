@@ -58,7 +58,8 @@ const registerUser = async (req, res) => {
 const validateEmail = async (req, res) => {
   try {
     console.log("🟢 Token recibido:", req.user);
-    console.log("🟢 Código recibido:", req.body.code);
+    const { code } = req.body;
+    console.log("🟢 Código recibido:", code);
 
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -66,11 +67,29 @@ const validateEmail = async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
+    if (user.status === "disabled") {
+      return res
+        .status(403)
+        .json({ message: "Esta cuenta está deshabilitada." });
+    }
+
     console.log("🟢 Código en BD:", user.verificationCode);
 
-    if (user.verificationCode !== req.body.code) {
-      console.log("🔴 Código incorrecto");
-      return res.status(400).json({ message: "Código incorrecto" });
+    if (user.verificationCode !== code) {
+      user.verificationAttempts -= 1;
+
+      if (user.verificationAttempts <= 0) {
+        user.status = "disabled";
+        await user.save();
+        return res.status(403).json({
+          message: "Cuenta deshabilitada por demasiados intentos fallidos.",
+        });
+      }
+
+      await user.save();
+      return res.status(400).json({
+        message: `Código incorrecto. Intentos restantes: ${user.verificationAttempts}`,
+      });
     }
 
     user.status = "verified";
@@ -99,6 +118,18 @@ const loginUser = async (req, res) => {
 
     console.log("🟢 Usuario encontrado:", user.email);
 
+    if (user.status === "pending") {
+      return res
+        .status(403)
+        .json({ message: "Tu cuenta no está verificada. Revisa tu correo." });
+    }
+
+    if (user.status === "disabled") {
+      return res
+        .status(403)
+        .json({ message: "Tu cuenta ha sido deshabilitada." });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password); // Comparar hash
     if (!isMatch) {
       console.log("🔴 Contraseña incorrecta");
@@ -114,6 +145,23 @@ const loginUser = async (req, res) => {
   } catch (error) {
     console.error("❌ Error en el login:", error);
     res.status(500).json({ message: "Error en el login" });
+  }
+};
+
+const getCurrentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select(
+      "-password -verificationCode -__v"
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    res.json({ user });
+  } catch (error) {
+    console.error("❌ Error al obtener el usuario:", error);
+    res.status(500).json({ message: "Error al obtener el usuario" });
   }
 };
 
@@ -188,6 +236,33 @@ const updateLogo = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const soft = req.query.soft !== "false"; // por defecto: true
+
+    const user = await User.findById(userId);
+    if (!user)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+
+    if (soft) {
+      user.status = "disabled";
+      await user.save();
+      return res.json({
+        message: "🟡 Usuario deshabilitado correctamente (soft delete)",
+      });
+    } else {
+      await User.findByIdAndDelete(userId);
+      return res.json({
+        message: "🔴 Usuario eliminado permanentemente (hard delete)",
+      });
+    }
+  } catch (error) {
+    console.error("❌ Error al eliminar usuario:", error);
+    res.status(500).json({ message: "Error al eliminar el usuario" });
+  }
+};
+
 module.exports = {
   registerUser,
   validateEmail,
@@ -195,4 +270,6 @@ module.exports = {
   updateOnboarding,
   updateCompany,
   updateLogo,
+  getCurrentUser,
+  deleteUser,
 };
