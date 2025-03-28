@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const path = require("path");
 const { matchedData } = require("express-validator");
 const generateCode = require("../utils/generateCode");
+const { uploadToPinata } = require("../utils/handleUploadIPFS");
 
 // Registro de usuario
 const registerUser = async (req, res) => {
@@ -158,40 +159,32 @@ const updateCompany = async (req, res) => {
 
 const updateLogo = async (req, res) => {
   try {
-    console.log("🟢 Token OK, buscando usuario...");
     const user = await User.findById(req.user.id);
-
-    if (!user) {
-      console.log("❌ Usuario no encontrado");
+    if (!user)
       return res.status(404).json({ message: "Usuario no encontrado" });
-    }
 
-    console.log("🟢 Usuario encontrado:", user.email);
-
-    if (!req.file) {
-      console.log("❌ Archivo no recibido");
+    if (!req.file)
       return res
         .status(400)
         .json({ message: "No se ha subido ningún archivo" });
-    }
 
-    console.log("🟢 Archivo recibido:", req.file);
+    // Subir a IPFS vía Pinata
+    const pinataRes = await uploadToPinata(
+      req.file.buffer,
+      req.file.originalname
+    );
+    const ipfsUrl = `https://${process.env.PINATA_GATEWAY_URL}/ipfs/${pinataRes.IpfsHash}`;
 
-    const logoPath = path.join("/storage/logos", req.file.filename);
-    user.logoUrl = logoPath;
+    user.logoUrl = ipfsUrl;
     await user.save();
 
-    console.log("✅ Logo guardado en:", logoPath);
-
     res.json({
-      message: "✅ Logo actualizado correctamente",
-      logoUrl: logoPath,
+      message: "✅ Logo subido a IPFS correctamente",
+      logoUrl: ipfsUrl,
     });
   } catch (error) {
-    console.error("❌ Error actualizando el logo:", error);
-    res
-      .status(500)
-      .json({ message: "Error al actualizar el logo", error: error.message });
+    console.error("❌ Error al subir el logo a IPFS:", error);
+    res.status(500).json({ message: "Error al subir el logo a IPFS" });
   }
 };
 

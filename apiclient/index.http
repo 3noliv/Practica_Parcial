@@ -19,7 +19,7 @@ Content-Type: application/json
 ### 3. Validación del email (con token y código)
 PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiMDRlMTgxMTliMTc2YjJhOCIsImlhdCI6MTc0MzExNTgzNSwiZXhwIjoxNzQzMTE5NDM1fQ.UmSX7S-Vs3C0XqyFzFmKSs-6-KUf9ysHzqLJPCnbYGA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZDdmMWM3Y2I0ZGE2ODhjNyIsImlhdCI6MTc0MzE5MjczNiwiZXhwIjoxNzQzMTk2MzM2fQ.qDuxcjNTHqUIcs3Llt2qWD5J-XUa4cFqzmmFmzBMaMw
 
 {
   "code": "859198"
@@ -28,7 +28,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiM
 ### 4. Onboarding - Datos personales
 PUT http://localhost:3000/api/user/register
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiMDRlMTgxMTliMTc2YjJhOCIsImlhdCI6MTc0MzExNTkxOCwiZXhwIjoxNzQzMTE5NTE4fQ.ElhXWYSHvWfy9bkSXGee8qhp8wJh_b1METBk4fGB02Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZDdmMWM3Y2I0ZGE2ODhjNyIsImlhdCI6MTc0MzE5Mjc2NSwiZXhwIjoxNzQzMTk2MzY1fQ.qEyzSR6S2fP8GDPcLnNnKpAx7sakGaTjwDT7UVzVKLs
 
 {
   "name": "Juan",
@@ -39,7 +39,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiM
 ### 5. Datos de la compañía
 PATCH http://localhost:3000/api/user/company
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiMDRlMTgxMTliMTc2YjJhOCIsImlhdCI6MTc0MzExNTkxOCwiZXhwIjoxNzQzMTE5NTE4fQ.ElhXWYSHvWfy9bkSXGee8qhp8wJh_b1METBk4fGB02Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZDdmMWM3Y2I0ZGE2ODhjNyIsImlhdCI6MTc0MzE5Mjc2NSwiZXhwIjoxNzQzMTk2MzY1fQ.qEyzSR6S2fP8GDPcLnNnKpAx7sakGaTjwDT7UVzVKLs
 
 {
   "name": "Empresa S.A.",
@@ -49,7 +49,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiM
 
 ### Subida de logo
 PATCH http://localhost:3000/api/user/logo
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTVkNjNiMDRlMTgxMTliMTc2YjJhOCIsImlhdCI6MTc0MzExNTkxOCwiZXhwIjoxNzQzMTE5NTE4fQ.ElhXWYSHvWfy9bkSXGee8qhp8wJh_b1METBk4fGB02Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTcwMmEwZDdmMWM3Y2I0ZGE2ODhjNyIsImlhdCI6MTc0MzE5Mjc2NSwiZXhwIjoxNzQzMTk2MzY1fQ.qEyzSR6S2fP8GDPcLnNnKpAx7sakGaTjwDT7UVzVKLs
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
