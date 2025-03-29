@@ -8,6 +8,8 @@ const {
   updateLogo,
   getCurrentUser,
   deleteUser,
+  recoverPassword,
+  resetPassword,
 } = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const uploadLogo = require("../middlewares/uploadLogo");
@@ -218,5 +220,53 @@ router.patch("/logo", authMiddleware, uploadLogo.single("logo"), updateLogo);
  *         description: Usuario eliminado correctamente
  */
 router.delete("/", authMiddleware, deleteUser);
+
+/**
+ * @openapi
+ * /api/user/recover:
+ *   post:
+ *     tags:
+ *       - User
+ *     summary: Generar token para recuperar contraseña
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Token generado (ver consola o BD)
+ */
+router.post("/recover", recoverPassword);
+
+/**
+ * @openapi
+ * /api/user/reset-password:
+ *   put:
+ *     tags:
+ *       - User
+ *     summary: Restablecer contraseña usando token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [token, newPassword]
+ *             properties:
+ *               token:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Contraseña actualizada correctamente
+ */
+router.put("/reset-password", resetPassword);
 
 module.exports = router;

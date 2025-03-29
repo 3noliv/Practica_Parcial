@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const generateCode = require("../utils/generateCode");
 const { uploadToPinata } = require("../utils/handleUploadIPFS");
 
@@ -279,6 +280,64 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const recoverPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "No existe ningún usuario con ese email" });
+    }
+
+    // Generamos un token aleatorio (puedes usar uuid también)
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const expires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
+
+    user.resetToken = resetToken;
+    user.resetTokenExpires = expires;
+    await user.save();
+
+    console.log(`🔐 Token de recuperación para ${email}: ${resetToken}`);
+
+    res.json({
+      message: "Token de recuperación generado (ver consola o base de datos)",
+    });
+  } catch (error) {
+    console.error("❌ Error generando token de recuperación:", error);
+    res
+      .status(500)
+      .json({ message: "Error al iniciar la recuperación de contraseña" });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpires: { $gt: new Date() }, // aún válido
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Token inválido o expirado" });
+    }
+
+    // Cambiar la contraseña y limpiar el token
+    user.password = newPassword;
+    user.resetToken = null;
+    user.resetTokenExpires = null;
+    await user.save();
+
+    res.json({ message: "✅ Contraseña actualizada correctamente" });
+  } catch (error) {
+    console.error("❌ Error al actualizar contraseña:", error);
+    res.status(500).json({ message: "Error al restablecer la contraseña" });
+  }
+};
+
 module.exports = {
   registerUser,
   validateEmail,
@@ -288,4 +347,6 @@ module.exports = {
   updateLogo,
   getCurrentUser,
   deleteUser,
+  recoverPassword,
+  resetPassword,
 };

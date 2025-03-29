@@ -1,3 +1,5 @@
+# IMPORTANTE: Sustituir [[TOKEN]] por un JWT válido antes de probar
+
 ### 1. Registro de usuario
 POST http://localhost:3000/api/user/register
 Content-Type: application/json
@@ -19,7 +21,7 @@ Content-Type: application/json
 ### 3. Validación del email (con token y código)
 PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZDk4NTJiNTczMzgzMjA1YSIsImlhdCI6MTc0MzI0NzkwMSwiZXhwIjoxNzQzMjUxNTAxfQ.QxfyWW5v-cHKrU8RjxqLO5z6J7_zKSUWhJBnEIQ30IM
+Authorization: Bearer [[TOKEN]]
 
 {
   "code": "427490"
@@ -28,7 +30,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZ
 ### 4. Onboarding - Datos personales
 PUT http://localhost:3000/api/user/register
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZDk4NTJiNTczMzgzMjA1YSIsImlhdCI6MTc0MzI0Nzk0MiwiZXhwIjoxNzQzMjUxNTQyfQ.kKIfLGWEynTto1dg0H6nWflJ2k312keHZbd5StCuGKQ
+Authorization: Bearer [[TOKEN]]
 
 {
   "name": "Juan",
@@ -39,7 +41,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZ
 ### 5. Datos de la compañía
 PATCH http://localhost:3000/api/user/company
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZDk4NTJiNTczMzgzMjA1YSIsImlhdCI6MTc0MzI0Nzk0MiwiZXhwIjoxNzQzMjUxNTQyfQ.kKIfLGWEynTto1dg0H6nWflJ2k312keHZbd5StCuGKQ
+Authorization: Bearer [[TOKEN]]
 
 {
   "name": "Empresa S.A.",
@@ -49,7 +51,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZ
 
 ### Subida de logo
 PATCH http://localhost:3000/api/user/logo
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZDk4NTJiNTczMzgzMjA1YSIsImlhdCI6MTc0MzI0Nzk0MiwiZXhwIjoxNzQzMjUxNTQyfQ.kKIfLGWEynTto1dg0H6nWflJ2k312keHZbd5StCuGKQ
+Authorization: Bearer [[TOKEN]]
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -61,12 +63,29 @@ Content-Type: image/png
 
 ### Obtener datos del usuario autenticado
 GET http://localhost:3000/api/user/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZDk4NTJiNTczMzgzMjA1YSIsImlhdCI6MTc0MzI0Nzk0MiwiZXhwIjoxNzQzMjUxNTQyfQ.kKIfLGWEynTto1dg0H6nWflJ2k312keHZbd5StCuGKQ
+Authorization: Bearer [[TOKEN]]
 
 ### Soft delete
 DELETE http://localhost:3000/api/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZDk4NTJiNTczMzgzMjA1YSIsImlhdCI6MTc0MzI0Nzk0MiwiZXhwIjoxNzQzMjUxNTQyfQ.kKIfLGWEynTto1dg0H6nWflJ2k312keHZbd5StCuGKQ
+Authorization: Bearer [[TOKEN]]
 
 ### Hard delete
 DELETE http://localhost:3000/api/user?soft=false
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTdkYTFkZDk4NTJiNTczMzgzMjA1YSIsImlhdCI6MTc0MzI0Nzk0MiwiZXhwIjoxNzQzMjUxNTQyfQ.kKIfLGWEynTto1dg0H6nWflJ2k312keHZbd5StCuGKQ
+Authorization: Bearer [[TOKEN]]
+
+### Iniciar recuperación
+POST http://localhost:3000/api/user/recover
+Content-Type: application/json
+
+{
+  "email": "test@example.com"
+}
+
+### Resetear contraseña
+PUT http://localhost:3000/api/user/reset-password
+Content-Type: application/json
+
+{
+  "token": "EL_TOKEN_QUE_VES_EN_CONSOLA",
+  "newPassword": "NuevaPass123"
+}
