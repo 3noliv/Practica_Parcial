@@ -1,8 +1,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const path = require("path");
-const { matchedData } = require("express-validator");
 const generateCode = require("../utils/generateCode");
 const { uploadToPinata } = require("../utils/handleUploadIPFS");
 
@@ -130,11 +128,29 @@ const loginUser = async (req, res) => {
         .json({ message: "Tu cuenta ha sido deshabilitada." });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password); // Comparar hash
+    const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
-      console.log("🔴 Contraseña incorrecta");
-      return res.status(401).json({ message: "Credenciales inválidas" });
+      user.loginAttempts -= 1;
+
+      if (user.loginAttempts <= 0) {
+        user.status = "disabled";
+        await user.save();
+        return res.status(403).json({
+          message:
+            "Tu cuenta ha sido deshabilitada por múltiples intentos fallidos de login.",
+        });
+      }
+
+      await user.save();
+      return res.status(401).json({
+        message: `Credenciales inválidas. Intentos restantes: ${user.loginAttempts}`,
+      });
     }
+
+    // Resetear intentos si el login fue correcto
+    user.loginAttempts = 3;
+    await user.save();
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",

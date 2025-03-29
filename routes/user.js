@@ -93,6 +93,10 @@ router.put("/validation", authMiddleware, validateCode, validateEmail);
  *     responses:
  *       200:
  *         description: Login correcto, retorna token
+ *       401:
+ *         description: Credenciales inválidas o cuenta deshabilitada
+ *       403:
+ *         description: Cuenta no verificada o deshabilitada
  */
 router.post("/login", validateLogin, loginUser);
 
