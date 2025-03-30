@@ -255,28 +255,42 @@ const updateLogo = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const soft = req.query.soft !== "false"; // por defecto: true
+    const soft = req.query.soft !== "false"; // Por defecto true
 
-    const user = await User.findById(userId);
-    if (!user)
+    const user = await User.findById(req.user.id);
+    if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
+    }
 
     if (soft) {
-      user.status = "disabled";
-      await user.save();
-      return res.json({
-        message: "🟡 Usuario deshabilitado correctamente (soft delete)",
-      });
+      await user.delete(); // Soft delete usando mongoose-delete
+      return res.json({ message: "✅ Usuario deshabilitado correctamente" });
     } else {
-      await User.findByIdAndDelete(userId);
-      return res.json({
-        message: "🔴 Usuario eliminado permanentemente (hard delete)",
-      });
+      await user.deleteOne(); // Hard delete definitivo
+      return res.json({ message: "🗑️ Usuario eliminado permanentemente" });
     }
   } catch (error) {
     console.error("❌ Error al eliminar usuario:", error);
     res.status(500).json({ message: "Error al eliminar el usuario" });
+  }
+};
+
+const restoreUser = async (req, res) => {
+  try {
+    const restored = await User.restore({ _id: req.user.id });
+
+    if (restored.nModified === 0) {
+      return res
+        .status(404)
+        .json({
+          message: "No se pudo restaurar el usuario (¿ya estaba activo?)",
+        });
+    }
+
+    res.json({ message: "✅ Usuario restaurado correctamente" });
+  } catch (error) {
+    console.error("❌ Error al restaurar usuario:", error);
+    res.status(500).json({ message: "Error al restaurar el usuario" });
   }
 };
 
@@ -347,6 +361,7 @@ module.exports = {
   updateLogo,
   getCurrentUser,
   deleteUser,
+  restoreUser,
   recoverPassword,
   resetPassword,
 };

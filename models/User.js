@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongooseDelete = require("mongoose-delete");
 const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema(
@@ -43,7 +44,7 @@ const UserSchema = new mongoose.Schema(
     resetTokenExpires: {
       type: Date,
       default: null,
-    },    
+    },
     personalData: {
       name: String,
       surname: String,
@@ -65,6 +66,11 @@ UserSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
+});
+
+UserSchema.plugin(mongooseDelete, {
+  deletedAt: true,
+  overrideMethods: "all",
 });
 
 module.exports = mongoose.model("User", UserSchema);

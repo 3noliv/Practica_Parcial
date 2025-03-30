@@ -10,6 +10,7 @@ const {
   deleteUser,
   recoverPassword,
   resetPassword,
+  restoreUser,
 } = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const uploadLogo = require("../middlewares/uploadLogo");
@@ -254,7 +255,7 @@ router.patch("/logo", authMiddleware, uploadLogo.single("logo"), updateLogo);
  *   delete:
  *     tags:
  *       - Cuenta
- *     summary: Eliminar usuario (soft o hard delete)
+ *     summary: Eliminar usuario (soft o hard delete con mongoose-delete)
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -262,11 +263,26 @@ router.patch("/logo", authMiddleware, uploadLogo.single("logo"), updateLogo);
  *         name: soft
  *         schema:
  *           type: boolean
- *         description: true (soft delete) o false (hard delete)
+ *         description: true (soft delete con .delete()) o false (hard delete con .deleteOne())
  *     responses:
  *       200:
- *         description: Usuario eliminado correctamente
+ *         description: Usuario eliminado o deshabilitado correctamente
  */
 router.delete("/", authMiddleware, deleteUser);
+
+/**
+ * @openapi
+ * /api/user/restore:
+ *   put:
+ *     tags:
+ *       - Cuenta
+ *     summary: Restaurar usuario previamente eliminado (soft delete)
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Usuario restaurado correctamente
+ */
+router.put("/restore", authMiddleware, restoreUser);
 
 module.exports = router;
